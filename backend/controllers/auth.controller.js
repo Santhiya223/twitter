@@ -5,6 +5,19 @@ export const signup = async (req, res) => {
     try {
         const {fullName, userName, password, email} = req.body;
 
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if(!emailRegex.test(email)){
+            return res.status(400).json({error: "Invalid Email format"});
+        }
+        
+
+        // Example usage:
+        const validateEmail = (email) => emailRegex.test(email);
+        
+        // Test the function
+        console.log(validateEmail("test@example.com")); // true
+        console.log(validateEmail("invalid-email"));    // false
+        
         const existingUser = await User.findOne({userName});
         if(existingUser) {
             return res.status(400).json({error: "Username already taken"});
