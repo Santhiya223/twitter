@@ -41,7 +41,20 @@ const userSchema =  new mongoose.Schema({
     coverImg: {
         type: String,
         default: ""
-    }
+    },
+    bio: {
+         type: String,
+        default: ""
+    },
+    link: {
+        type: String,
+       default: ""
+   },
+    likedPost: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        default: []
+    }]
 }, { timeStamps: true });
 
 const User = await new mongoose.model("User", userSchema);
