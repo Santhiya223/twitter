@@ -6,6 +6,7 @@ import connectToMongodb from './db/connectToMongodb.js';
 import cookieParser from 'cookie-parser';
 import userRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
 
 cloudinary.config({
@@ -22,6 +23,8 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/notifications", notificationRoutes);
+
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
