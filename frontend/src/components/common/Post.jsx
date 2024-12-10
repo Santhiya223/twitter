@@ -67,7 +67,7 @@ const Post = ({ post }) => {
 							>
 								<FaRegComment className='w-4 h-4  text-slate-500 group-hover:text-sky-400' />
 								<span className='text-sm text-slate-500 group-hover:text-sky-400'>
-									{post.comments.length}
+									{post.comments?.length || 0}
 								</span>
 							</div>
 							{/* We're using Modal Component from DaisyUI */}
@@ -139,7 +139,7 @@ const Post = ({ post }) => {
 										isLiked ? "text-pink-500" : ""
 									}`}
 								>
-									{post.likes.length}
+									{post.likes?.length || 0}
 								</span>
 							</div>
 						</div>
