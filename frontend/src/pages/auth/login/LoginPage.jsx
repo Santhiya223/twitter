@@ -10,20 +10,20 @@ import toast from "react-hot-toast";
 
 const LoginPage = () => {
 	const [formData, setFormData] = useState({
-		username: "",
+		userName: "",
 		password: "",
 	});
 
 	const queryClient = useQueryClient();
 
 	const {mutate:LoginMutation, isError, isPending, error} = useMutation({
-		mutationFn: async ({username, password}) => {
+		mutationFn: async ({userName, password}) => {
 			const res = await fetch("/api/auth/login", {
 				method: "POST",
 				headers: {
 					"Content-Type":"application/json"
 				},
-				body: JSON.stringify({username, password})
+				body: JSON.stringify({userName, password})
 			});
 			const data = await res.json();
 			if(!res.ok) throw new Error(data.error || "Failed to Login");
@@ -68,9 +68,9 @@ const LoginPage = () => {
 							type='text'
 							className='grow'
 							placeholder='username'
-							name='username'
+							name='userName'
 							onChange={handleInputChange}
-							value={formData.username}
+							value={formData.userName}
 						/>
 					</label>
 
