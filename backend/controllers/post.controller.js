@@ -17,9 +17,16 @@ export const createPost = async (req, res) => {
 		}
 
 		if (img) {
-			const uploadedResponse = await cloudinary.uploader.upload(img);
-			img = uploadedResponse.secure_url;
-		}
+			try {
+			  const uploadedResponse = await cloudinary.uploader.upload(img);
+			  img = uploadedResponse.secure_url;
+			} catch (uploadError) {
+			  console.error("Error uploading image to Cloudinary:", uploadError);
+			  return res.status(500).json({ error: "Image upload failed", details: uploadError.message });
+			}
+		  }
+		  
+		  
 
 		const newPost = new Post({
 			user: userId,
@@ -47,9 +54,14 @@ export const deletePost = async (req, res) => {
 		}
 
 		if (post.img) {
-			const imgId = post.img.split("/").pop().split(".")[0];
-			await cloudinary.uploader.destroy(imgId);
-		}
+			try {
+			  const imgId = post.img.split("/").pop().split(".")[0];
+			  await cloudinary.uploader.destroy(imgId);
+			} catch (cloudinaryError) {
+			  console.log("Error deleting image from Cloudinary: ", cloudinaryError);
+			}
+		  }
+		  
 
 		await Post.findByIdAndDelete(req.params.id);
 
