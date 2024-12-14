@@ -110,18 +110,18 @@ export const likeUnlikePost = async (req, res) => {
 			return res.status(404).json({ error: "Post not found" });
 		}
 
-		const userLikedPost = post.likes.includes(userId);
+		const userLikedPost = post.like.includes(userId);
 
 		if (userLikedPost) {
 			// Unlike post
-			await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
+			await Post.updateOne({ _id: postId }, { $pull: { like: userId } });
 			await User.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
 
-			const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
+			const updatedLikes = post.like.filter((id) => id.toString() !== userId.toString());
 			res.status(200).json(updatedLikes);
 		} else {
 			// Like post
-			post.likes.push(userId);
+			post.like.push(userId);
 			await User.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
 			await post.save();
 
@@ -132,7 +132,7 @@ export const likeUnlikePost = async (req, res) => {
 			});
 			await notification.save();
 
-			const updatedLikes = post.likes;
+			const updatedLikes = post.like;
 			res.status(200).json(updatedLikes);
 		}
 	} catch (error) {

@@ -61,7 +61,9 @@ const RightPanel = () => {
 								<div>
 									<button
 										className='btn bg-white text-black hover:bg-white hover:opacity-90 rounded-full btn-sm'
-										onClick={(e) => {e.preventDefault(),follow(user._id)}}
+										onClick={(e) => {e.preventDefault(),
+											follow(user._id)
+										}}
 									>
 										{isPending? <LoadingSpinner size="sm"/>:"follow"}
 									</button>
