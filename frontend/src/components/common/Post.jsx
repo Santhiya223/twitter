@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from './LoadingSpinner'
 import toast from "react-hot-toast";
+import { formatPostDate } from "../../utils/date";
 
 const Post = ({ post }) => {
 	const [comment, setComment] = useState("");
@@ -77,9 +78,46 @@ const  {mutate: likePost, isPending: isLiking}= useMutation({
 	}
 });
 
-	const formattedDate = "1h";
+const  {mutate: commentPost, isPending: isCommenting}= useMutation({
+	mutationFn: async () => {
+		try{
+			const res = await fetch(`/api/posts/comment/${post._id}`,
+				{
+					method: 'POST',
+					headers:{
+						'Content-Type' : "application/json"
+					},
+					body: JSON.stringify({text: comment}),				
+				},			
+			);
+			const data = await res.json();
+			if(!res.ok) throw new Error(data.error || "Something went wrong");
+			if(data.error) throw new Error(data.error);
+			console.log(data);
+			return data;
+		} catch(e) {
+			throw new Error(e.message);
+		}
+	},
+	onSuccess: (updatedLikes)=> {
+		//it is not best UX because it refetch all posts
+		toast.success("Commented successfully");
+		queryClient.invalidateQueries({queryKey: ["posts"]});
 
-	const isCommenting = false;
+		//instead update the cache directly for that post
+		// queryClient.setQueryData(["posts"], (olddata)=>{
+		// 	return olddata.map(p=>{
+		// 		if(p._id === post._id){
+		// 			return {...p,like:updatedLikes}
+		// 		}
+		// 		return p;
+		// 	});
+		// });
+	}
+});
+
+	const formattedDate = formatPostDate(post.createdAt);
+
 
 	const handleDeletePost = () => {
 		deletePosts();
@@ -87,6 +125,8 @@ const  {mutate: likePost, isPending: isLiking}= useMutation({
 
 	const handlePostComment = (e) => {
 		e.preventDefault();
+		if(isCommenting) return;
+		commentPost(); 
 	};
 
 	const handleLikePost = () => {
