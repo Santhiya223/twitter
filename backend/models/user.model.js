@@ -55,7 +55,7 @@ const userSchema =  new mongoose.Schema({
         ref: "Post",
         default: []
     }]
-}, { timeStamps: true });
+}, { timestamps: true });
 
-const User = await new mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;
