@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import userRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
-
+import path from 'path';
 
 
 dotenv.config();
@@ -26,7 +26,15 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 
+const __dirname = path.resolve();
 
+if(process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname, "/frontend/dist")));
+    app.get("*", (req,res)=> {
+        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+    })
+
+}
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Running in Port no : ${PORT}`);
