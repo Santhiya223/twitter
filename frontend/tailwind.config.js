@@ -1,5 +1,6 @@
 import daisyui from 'daisyui';
 import daisyuiThemes from "daisyui/src/theming/themes";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -11,20 +12,16 @@ export default {
   plugins: [
     daisyui
   ],
-
   daisyui: {
-    themes:[
-      "black",
-      "light", {
+    themes: [
+      "black", // Default theme
+      {
         black: {
           ...daisyuiThemes["black"],
-          primary:"rgb(29,155,240)",
-          secondary:"rgb(24,24,24)"
+          primary: "rgb(29,155,240)",
+          secondary: "rgb(24,24,24)"
         }
       }
     ]
   }
-  
-
 }
-
